@@ -16,6 +16,12 @@ app.get('/api/data/*', (req, res) => {
   const filepath = path.join(__dirname, 'data', relativePath);
 
   console.log(`Requested file path: ${filepath}`);
+  if (!fs.existsSync(filepath)) {
+    console.error(`File not found: ${filepath}`);
+    return res.status(404).json({ error: 'File not found - No file' });
+  }
+  
+
 
   fs.stat(filepath, (err, stats) => {
     if (err) {
@@ -51,7 +57,11 @@ app.get('/api/data/*', (req, res) => {
 //});
 // Root route
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  if (req.path.endsWith('.png')) {
+    res.sendFile(path.join(__dirname, 'public', 'image-viewer.html'));
+  } else {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  }
 });
 
 app.listen(port, () => {
