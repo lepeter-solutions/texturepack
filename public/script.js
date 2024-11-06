@@ -91,6 +91,8 @@ async function fetchData(path = '') {
     if (path.endsWith('.png')) {
         const blob = await response.blob();
         const img = URL.createObjectURL(blob);
+        location.reload();
+
         renderEndImage(img);
         return;
     }
